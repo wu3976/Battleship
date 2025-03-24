@@ -79,8 +79,8 @@ export default function EasyGame() {
             </div>
             <div className="center game-state">
                 {gameState === GAME_IN_PROGRESS && "Defeat the AI"}
-                {gameState === GAME_AI_WIN && "You Lose!"}
-                {gameState === GAME_PLAYER_WIN && "You Win!"}
+                {gameState === GAME_AI_WIN && "Game over! AI Won!"}
+                {gameState === GAME_PLAYER_WIN && "Game over! Player Won!"}
             </div>
             <div className="board-title">ai board</div>
             <BoardContext.Provider value={aiBoardContextValue}>

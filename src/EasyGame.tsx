@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./NormalGame.css";
 import { GAME_AI_WIN, GAME_IN_PROGRESS, GAME_PLAYER_WIN } from "./constants/game_states";
 import { BoardStateType } from "./types/BoardStateType";
@@ -9,7 +9,7 @@ import { BoardContext } from "./contexts/BoardContext";
 import Board from "./components/Board";
 
 export default function EasyGame() {
-    let interval: null | number = null;
+    const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
     
     const [time, setTime] = useState<number>(0);
     const [gameState, setGameState] = useState<number>(GAME_IN_PROGRESS);
@@ -42,6 +42,10 @@ export default function EasyGame() {
             }
             // check if player wins
             if (checkWin(aiBoardState.currState)) {
+                if(intervalRef.current !== null) {
+                    clearInterval(intervalRef.current);
+                    intervalRef.current = null
+                }
                 setGameState(GAME_PLAYER_WIN);
                 return;
             }
@@ -50,13 +54,19 @@ export default function EasyGame() {
 
     const resetGame = () => {
         setTime(0);
+        if (intervalRef.current !== null) {
+            clearInterval(intervalRef.current)
+        }
+        intervalRef.current = setInterval(() => {
+            setTime(prev => prev + 1);
+        }, 1000);
         setGameState(GAME_IN_PROGRESS);
         setAiBoardState(getInitialBoardState());
     }
 
     useEffect(() => {
-        if (!interval) {
-            interval = setInterval(() => {
+        if (!intervalRef.current) {
+            intervalRef.current = setInterval(() => {
                 setTime(prev => prev + 1);
             }, 1000);
         }   

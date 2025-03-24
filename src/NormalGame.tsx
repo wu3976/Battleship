@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BoardContext } from "./contexts/BoardContext";
 import Timer from "./components/Timer";
 import "./NormalGame.css"
@@ -10,7 +10,7 @@ import { GAME_IN_PROGRESS, GAME_AI_WIN, GAME_PLAYER_WIN } from "./constants/game
 
 export default function NormalGame() {
     const [aiCannonFireSeq, setAiCannonFireSeq]= useState<number[] | null>(null);
-    let interval: null | number = null;
+    const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
     const [time, setTime] = useState<number>(0);
     const [gameState, setGameState] = useState<number>(GAME_IN_PROGRESS);
@@ -53,6 +53,10 @@ export default function NormalGame() {
             }
             // check if player wins
             if (checkWin(aiBoardState.currState)) {
+                if (intervalRef.current !== null) {
+                    clearInterval(intervalRef.current);
+                    intervalRef.current = null;
+                }
                 setGameState(GAME_PLAYER_WIN);
                 return;
             }
@@ -60,6 +64,10 @@ export default function NormalGame() {
             aiStep(myBoardState.currState, aiCannonFireSeq);
             // check if ai wins
             if (checkWin(myBoardState.currState)) {
+                if (intervalRef.current !== null) {
+                    clearInterval(intervalRef.current);
+                    intervalRef.current = null;
+                }
                 setGameState(GAME_AI_WIN);
                 return; 
             }
@@ -70,17 +78,26 @@ export default function NormalGame() {
 
     const resetGame = () => {
         setTime(0);
+        if (intervalRef.current !== null) {
+            clearInterval(intervalRef.current)
+        }
+        intervalRef.current = setInterval(() => {
+            setTime(prev => prev + 1);
+        }, 1000);
         setGameState(GAME_IN_PROGRESS);
         setAiBoardState(getInitialBoardState());
-        setMyBoardState(getInitialBoardState());
-        setAiCannonFireSeq(generateAICannonFireSeq(myBoardState.currState))
+        const newMyBoardState: BoardStateType = getInitialBoardState();
+        setMyBoardState(newMyBoardState);
+        setAiCannonFireSeq(generateAICannonFireSeq(newMyBoardState.currState))        
     }
 
     useEffect(() => {
-        if (!interval) {
-            interval = setInterval(() => {
+        if (!intervalRef.current) {
+            intervalRef.current = setInterval(() => {
                 setTime(prev => prev + 1);
             }, 1000);
+            console.log(intervalRef.current);
+            
         }
         if (aiCannonFireSeq === null) {
             setAiCannonFireSeq(generateAICannonFireSeq(myBoardState.currState));

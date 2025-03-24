@@ -19,7 +19,7 @@ export function generateAICannonFireSeq(boardStates: number[]): number[] {
     return shuffleArray(aiCannonFireSeq);
 }
 
-export function aiStep(myCurrState: number[], aiCannonFireSeq: number[] | null): void  {
+export function aiStep(myCurrState: number[], aiCannonFireSeq: number[] | null): void  {    
     if (aiCannonFireSeq === null) {
         throw Error("aiCannonFireSeq is null");
     }

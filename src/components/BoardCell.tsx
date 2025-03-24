@@ -23,7 +23,8 @@ export default function BoardCell({ cellState, showShip, cellId } : BoardCellPro
         bgColor = !showShip && hovered ? BGLIGHTBLUE_HOVER :BGLIGHTBLUE;
         color = BGLIGHTBLUE;
     } else if (cellState === 1) {
-        cellContent = showShip ? "⚫" : "";
+        // cellContent = showShip ? "⚫" : "";
+        cellContent = "⚫" ;
         bgColor = !showShip && hovered ? BGLIGHTBLUE_HOVER : BGLIGHTBLUE;
         color = BLACK;
     } else if (cellState === 2) {

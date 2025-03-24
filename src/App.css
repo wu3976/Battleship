@@ -1,0 +1,22 @@
+.navigation-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: rgb(215, 240, 255);
+    height: 2.5rem;
+}
+
+.nav-link {
+    text-decoration: none;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: rgb(37, 157, 190);
+}
+
+.nav-link:hover {
+    color: rgb(24, 100, 121);
+}
+
+.route-content-container {
+    padding-top: 1rem;
+}
